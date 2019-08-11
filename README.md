@@ -1,2 +1,2 @@
 # cuePHP-framework
-a simple php mvp framwork
+a simple php api framwork
