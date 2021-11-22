@@ -1,5 +1,5 @@
 {
-    "name": "solatyolo/lightioc",
+    "name": "cuephp/ioc",
     "type": "library",
     "description": "a light weight log lib",
     "keywords": [

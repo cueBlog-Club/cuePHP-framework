@@ -1,5 +1,5 @@
 {
-    "name": "solatyolo/lightcache",
+    "name": "cuephp/cache",
     "type": "library",
     "description": "a light weight cache lib",
     "keywords": [ "psr-16", "cache", "light-cache","redis","memory"],

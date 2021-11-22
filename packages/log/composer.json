@@ -1,5 +1,5 @@
 {
-    "name": "solatyolo/lightlog",
+    "name": "cuephp/log",
     "type": "library",
     "description": "a light weight log lib",
     "keywords": [ "psr-3", "log"],

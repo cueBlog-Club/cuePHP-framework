@@ -1,5 +1,5 @@
 {
-    "name": "cueBlog/routing",
+    "name": "cuephp/routing",
     "type": "library",
     "description": "cueBlog Routing Component",
     "keywords": ["routing", "router", "URL", "URI"],

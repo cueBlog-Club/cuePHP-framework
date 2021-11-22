@@ -1,5 +1,5 @@
 {
-    "name": "solatyolo/lighthttp",
+    "name": "cuephp/http",
     "type": "library",
     "description": "a light weight http lib",
     "keywords": [ "psr-7","psr-15", "psr-17","psr-18", "curl", "http", "api"],
