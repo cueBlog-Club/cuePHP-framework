@@ -1,0 +1,25 @@
+{
+    "name": "solatyolo/lightlog",
+    "type": "library",
+    "description": "a light weight log lib",
+    "keywords": [ "psr-3", "log"],
+    "license": "MIT",
+    "homepage": "https://github.com/SolaTyolo/lightlog",
+    "autoload": {
+        "psr-4": {
+            "SolaTyolo\\Lightlog\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SolaTyolo\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "~7.3 || ^8.0",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0 || ^9.0"
+    }
+}

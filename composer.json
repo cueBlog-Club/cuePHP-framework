@@ -1,8 +1,8 @@
 {
-    "name": "cuePHP/framework",
-    "type": "library",
-    "description": "a php framework for REST api",
+    "name": "cuephp/framework",
+    "description": "a php framework modules",
     "keywords": ["framework","micro","api","simple"],
+    "license": "MIT",
     "authors": [
         {
             "name": "solat.yolo",
@@ -13,13 +13,6 @@
         "php": ">=7.2.0"
     },
     "require-dev": {
-    },
-    "autoload": {
-        "psr-4": {
-            "Core\\": "framework/",
-            "App\\": "app/"
-        }
-    },
-    "autoload-dev": {
+        "symplify/monorepo-builder": "^9.4"
     }
 }

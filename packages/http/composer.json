@@ -1,0 +1,25 @@
+{
+    "name": "solatyolo/lighthttp",
+    "type": "library",
+    "description": "a light weight http lib",
+    "keywords": [ "psr-7","psr-15", "psr-17","psr-18", "curl", "http", "api"],
+    "license": "MIT",
+    "homepage": "https://github.com/SolaTyolo/lighthttp",
+    "autoload": {
+        "psr-4": {
+            "SolaTyolo\\Lighthttp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SolaTyolo\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "~7.3 || ^8.0",
+        "ext-curl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0 || ^9.0"
+    }
+}

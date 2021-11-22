@@ -1,0 +1,23 @@
+{
+    "name": "cueBlog/routing",
+    "type": "library",
+    "description": "cueBlog Routing Component",
+    "keywords": ["routing", "router", "URL", "URI"],
+    "license": "MIT",
+    "version": "0.1.0",
+    "require": {
+        "php": "^7.1.3",
+        "symfony/yaml": "^4.3"
+    },
+    "autoload": {
+        "psr-4": { 
+            "CueBlog\\Routing\\": "src/" 
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}
