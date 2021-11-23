@@ -3,9 +3,7 @@ name: Split Monorepo
 on:
     push:
         branches:
-            - master
-        tags:
-            - '*'
+            - main
 
 jobs:
     provide_packages_json:

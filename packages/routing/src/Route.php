@@ -1,137 +1,84 @@
 <?php
+declare(strict_types=1);
 
-namespace CueBlog\Routing;
+namespace CuePhp\Routing;
+
+use Closure;
+use CuePhp\Routing\Exception\RouterParamInvalidException;
 
 /**
- * 单个路由
+ * single route
  */
 class Route
 {
     /**
-     * 请求路由
+     * Http Uri
+     * @var string
      */
     private $_path = '/';
 
     /**
-     * 可接受的请求方式
+     * Http Method
+     * @var string
      */
-    private $_methods = ['GET'];
+    private $_method = "";
 
     /**
-     * 可接受的请求头
+     * @var Closure
      */
-    private $_schemas = ['HTTP', 'HTTPS'];
+    private $_func = null;
 
-    /**
-     * 对应的控制器
-     */
-    private $_controller = 'index';
-
-    /**
-     * 对应的执行方法
-     */
-    private $_action = 'index';
-
-    public function __construct(string $path, array $params = [])
+    public function __construct(string $method, string $path, Closure $func)
     {
         $this->setPath($path);
-        $this->setMethods(isset($params['methods']) ? $params['methods'] : ['GET']);
-        $this->setController(isset($params['controller']) ? $params['controller'] : 'index');
-        $this->setAction(isset($params['action']) ? $params['action'] : 'index');
+        $this->setMethod($method);
+        $this->setFunc($func);
     }
-	
-	/**
-	 * 获取参数
-	 * @return array
-	 */
-    public function getParams()
-    {
-    	return [
-    	    'path' => $this->_path ,
-		    'method' => $this->_methods ,
-		    'controller' => $this->_controller ,
-		    'action' => $this->_action
-	    ];
-    }
-	
-	/**
-	 * @return string
-	 */
-    public function getPath()
+    
+    /**
+     * @return string
+     */
+    public function getPath():string
     {
         return $this->_path;
     }
-	
-	/**
-	 * @return array
-	 */
-    public function getMethods()
+    
+    /**
+     * @return string
+     */
+    public function getMethod():string
     {
-        return $this->_methods;
+        return $this->_method;
     }
 
-    public function getSchemas()
+    public function getFunc(): Closure
     {
-        return $this->_schemas;
+        return $this->_func;
     }
-
-    public function getController()
-    {
-        return $this->_controller;
-    }
-
-    public function getAction()
-    {
-        return $this->_action;
-    }
-	
-	/**
-	 * @param String $path
-	 * @return $this
-	 */
+    
+    /**
+     * @param String $path
+     * @return $this
+     */
     public function setPath(String $path)
     {
         $this->_path = $path;
         return $this;
     }
-	
-	/**
-	 * @param array $methods
-	 * @return $this
-	 */
-    public function setMethods(array $methods)
+
+    public function setMethod(string $method): void
     {
-        $this->_methods = array_map('strtoupper', $methods);
-        return $this;
+        if ($method === "") {
+            throw new RouterParamInvalidException();
+        }
+        $this->_method = strtoupper($method);
     }
-	
-	/**
-	 * @param array $schemas
-	 * @return $this
-	 */
-    public function setSchemas(array $schemas)
+
+    public function setFunc(Closure $func): void
     {
-        $this->_schemas = array_map('strtoupper', $schemas);
-        return $this;
-    }
-	
-	/**
-	 * @param string $controller
-	 * @return $this
-	 */
-    public function setController(string $controller)
-    {
-        $this->_controller = $controller;
-        return $this;
-    }
-	
-	/**
-	 * @param $action
-	 * @return $this
-	 */
-    public function setAction($action)
-    {
-        $this->_action = $action;
-        return $this;
+        if (is_callable($func) === false) {
+            throw new RouterParamInvalidException();
+        }
+        $this->_func = $func;
     }
 }
