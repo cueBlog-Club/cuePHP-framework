@@ -1,5 +1,5 @@
 {
-    "name": "cuephp/ioc",
+    "name": "cuephp/core",
     "type": "library",
     "description": "a light weight log lib",
     "keywords": [

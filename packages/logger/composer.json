@@ -1,5 +1,5 @@
 {
-    "name": "cuephp/log",
+    "name": "cuephp/logger",
     "type": "library",
     "description": "a light weight log lib",
     "keywords": [ "psr-3", "log"],
