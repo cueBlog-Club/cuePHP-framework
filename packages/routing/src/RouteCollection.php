@@ -5,6 +5,8 @@ namespace CuePhp\Routing;
 use Closure;
 use CuePhp\Routing\Exception\ResourceNotFoundException;
 use CuePhp\Routing\Route;
+use CuePhp\Routing\Engineer\EngineerImpl;
+use CuePhp\Routing\Engineer\RegexEngineer;
 
 final class RouteCollection
 {
@@ -15,14 +17,47 @@ final class RouteCollection
     protected $_routes = [];
 
     /**
+     * @var EngineerImpl
+     */
+    private $_engineer = null;
+
+    /**
      * Parameters from the matched route
      * @var Route
      */
     protected $_matchRoute = null;
 
-    public static function newRouter(): RouteCollection
+    protected function __construct( EngineerImpl $engineer )
     {
-        return new RouteCollection();
+        $this->_engineer = $engineer;
+    }
+
+    public static function newRouter( EngineerImpl $engineer = null ): RouteCollection
+    {
+        if( $engineer === null  ) {
+            $engineer = new RegexEngineer();
+        }
+        return new RouteCollection( $engineer );
+    }
+
+    public function get(string $route, Closure $func)
+    {
+        $this->add('GET', $route, $func);
+    }
+
+    public function post(string $route, Closure $func)
+    {
+        $this->add('POST', $route, $func);
+    }
+
+    public function delete(string $route, Closure $func)
+    {
+        $this->add("DELETE", $route, $func);
+    }
+
+    public function put(string $route, Closure $func)
+    {
+        $this->add('PUT', $route, $func);
     }
     
     /**
@@ -88,18 +123,21 @@ final class RouteCollection
      * Dispatch the route, creating the controller object and running the
      * action method
      *
-     * @param Context $ctx The Http Context
+     * @param string $uri
      *
      * @return void
      */
-    public function handle(Context $ctx): void
+    public function handle(string $uri = ""): void
     {
-        $url = self::removeQueryStringVariables($ctx->getUrl());
+        if ($uri === "") {
+            $uri = trim(urldecode($_SERVER['REQUEST_URI']), '/');
+        }
+        $url = self::removeQueryStringVariables($uri);
         if ($this->match($url)) {
             $func = $this->_matchRoute->getFunc();
             $func();
         } else {
-            throw new ResourceNotFoundException($ctx->getUrl());
+            throw new ResourceNotFoundException($uri);
         }
     }
 
