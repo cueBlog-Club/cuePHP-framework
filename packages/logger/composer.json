@@ -20,6 +20,19 @@
         "psr/log": "^3.0"
     },
     "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "phpstan/phpstan": "^1.2",
         "phpunit/phpunit": "^8.0 || ^9.0"
+    },
+    "scripts": {
+        "fix":  [
+            "./vendor/bin/phpcbf --standard=PSR2 src"
+        ],
+        "analyse": [
+            "./vendor/bin/phpstan analyse src"
+        ],
+        "unit-test": [
+            "./vendor/bin/phpunit"
+        ]
     }
 }
