@@ -5,6 +5,7 @@
     "keywords": ["routing", "router", "URL", "URI"],
     "license": "MIT",
     "version": "0.1.0",
+    "homepage": "https://github.com/cueBlog-Club/cuePHP-framework/tree/main/packages/routing",
     "require": {
         "php": "^7.1 || ^8.0",
         "symfony/yaml": "^4.3"
@@ -16,7 +17,7 @@
     },
     "autoload-dev": {
         "psr-4": { 
-            "CuePhp\\Routing\\Test\\": "tests/" 
+            "CuePhp\\Test\\Routing\\": "tests/" 
         }
     },
     "require-dev": {
@@ -30,6 +31,9 @@
         ],
         "analyse": [
             "./vendor/bin/phpstan analyse src"
+        ],
+        "unit-test": [
+            "./vendor/bin/phpunit"
         ]
     }
 }

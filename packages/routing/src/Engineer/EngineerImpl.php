@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace CuePhp\Routing\Engineer;
+use Closure;
 
 interface EngineerImpl
 {
@@ -9,7 +10,7 @@ interface EngineerImpl
     /**
      * insert path into rules engineer
      */
-    public function insert(string $path);
+    public function insert( string $route, Closure $func);
 
     /**
      * search path by rules
