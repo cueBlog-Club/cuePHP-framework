@@ -1,2 +1,3 @@
-# lightcahe
-a light weight  cache libary
+CuePhp-Cache
+
+suggest use phpredis extension
