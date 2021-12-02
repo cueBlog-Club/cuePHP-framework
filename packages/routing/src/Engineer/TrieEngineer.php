@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace CuePhp\Routing\Engineer;
 
-use Cuephp\Routing\Engineer\Trie\Node;
-use Cuephp\Routing\Utils\Str;
+use CuePhp\Routing\Engineer\Trie\Node;
+use CuePhp\Routing\Utils\Str;
 use Closure;
 
 /**
@@ -12,26 +12,13 @@ use Closure;
  */
 class TrieEngineer implements EngineerImpl
 {
-    /**
-     * http method
-     * @var string
-     */
-    private $_method = "";
-
-    /**
-     * trie tree head node
-     * @var Node
-     */
-    private $_head = null;
-
-
+    use EngineerTrait;
     /**
      * insert path into rules engineer
      */
-    public function insert( string $route, Closure $func)
+    public function insert( string $route)
     {
-        $parts = Str::parsePattern( $route );
-        $this->_head->insert( $route, $parts, 0 );
+      
     }
 
     /**

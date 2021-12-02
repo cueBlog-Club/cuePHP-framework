@@ -8,7 +8,7 @@
     "homepage": "https://github.com/cueBlog-Club/cuePHP-framework/tree/main/packages/routing",
     "require": {
         "php": "^7.1 || ^8.0",
-        "symfony/yaml": "^4.3"
+        "ext-mbstring": "*"
     },
     "autoload": {
         "psr-4": { 
@@ -32,8 +32,9 @@
         "analyse": [
             "./vendor/bin/phpstan analyse src"
         ],
-        "unit-test": [
-            "./vendor/bin/phpunit"
+        "unit": [
+            "./vendor/bin/phpunit --coverage-clover ./.coverage/clover.xml --verbose"
         ]
-    }
+    },
+    "minimum-stability": "dev"
 }

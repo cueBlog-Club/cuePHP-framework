@@ -6,7 +6,7 @@ use Closure;
 use CuePhp\Routing\Exception\ResourceNotFoundException;
 use CuePhp\Routing\Route;
 use CuePhp\Routing\Engineer\EngineerImpl;
-use CuePhp\Routing\Engineer\RegexEngineer;
+use CuePhp\Routing\Engineer\TrieEngineer;
 
 final class RouteCollection
 {
@@ -32,29 +32,39 @@ final class RouteCollection
         $this->_engineer = $engineer;
     }
 
-    public static function newRouter( EngineerImpl $engineer = null ): RouteCollection
-    {
-        if( $engineer === null  ) {
-            $engineer = new RegexEngineer();
-        }
-        return new RouteCollection( $engineer );
-    }
 
+
+    /**
+     * @var string $route
+     * @var Closure $func
+     */
     public function get(string $route, Closure $func)
     {
         $this->add('GET', $route, $func);
     }
 
+    /**
+     * @var string $route
+     * @var Closure $func
+     */
     public function post(string $route, Closure $func)
     {
         $this->add('POST', $route, $func);
     }
 
+    /**
+     * @var string $route
+     * @var Closure $func
+     */
     public function delete(string $route, Closure $func)
     {
         $this->add("DELETE", $route, $func);
     }
 
+    /**
+     * @var string $route
+     * @var Closure $func
+     */
     public function put(string $route, Closure $func)
     {
         $this->add('PUT', $route, $func);
@@ -62,21 +72,21 @@ final class RouteCollection
     
     /**
      * inject method and path into route collection
-     * @param string $name
+     * @param string $method
      * @param string $route
      * @param Closure $func
      */
     public function add(string $method, string $route, Closure $func)
     {
-         // Convert the route to a regular expression: escape forward slashes
-         $route = preg_replace('/\//', '\\/', $route);
-         // Convert variables e.g. {controller}
-         $route = preg_replace('/\{([a-z]+)\}/', '(?P<\1>[a-z-]+)', $route);
-         // Convert variables with custom regular expressions e.g. {id:\d+}
-         $route = preg_replace('/\{([a-z]+):([^\}]+)\}/', '(?P<\1>\2)', $route);
-         // Add start and end delimiters, and case insensitive flag
-         $route = '/^' . $route . '$/i';
-        $this->_routes[ self::buildRouteKey($method, $route) ] = new Route($method, $route, $func);
+        //  // Convert the route to a regular expression: escape forward slashes
+        //  $route = preg_replace('/\//', '\\/', $route);
+        //  // Convert variables e.g. {controller}
+        //  $route = preg_replace('/\{([a-z]+)\}/', '(?P<\1>[a-z-]+)', $route);
+        //  // Convert variables with custom regular expressions e.g. {id:\d+}
+        //  $route = preg_replace('/\{([a-z]+):([^\}]+)\}/', '(?P<\1>\2)', $route);
+        //  // Add start and end delimiters, and case insensitive flag
+        //  $route = '/^' . $route . '$/i';
+        // $this->_routes[ Str::buildRouteKey($method, $route) ] = new Route($method, $route, $func);
     }
 
     /**
@@ -139,17 +149,6 @@ final class RouteCollection
         } else {
             throw new ResourceNotFoundException($uri);
         }
-    }
-
-    /**
-     * generate route key
-     * @param string $method
-     * @param string $uri-path
-     * @return string
-     */
-    public static function buildRouteKey(string $method, string $uri): string
-    {
-        return $method . '-' . $uri;
     }
 
 

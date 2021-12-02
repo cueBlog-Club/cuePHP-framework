@@ -26,4 +26,16 @@ final class Str
         }
         return $parts;
     }
+
+
+    /**
+     * generate route key
+     * @param string $method
+     * @param string $uri-path
+     * @return string
+     */
+    public static function buildRouteKey(string $method, string $uri): string
+    {
+        return $method . '-' . $uri;
+    }
 }

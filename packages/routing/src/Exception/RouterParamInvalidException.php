@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace CuePhp\Routing\Exception;
 
-class RouterParamInvalidException extends \Exception
+use InvalidArgumentException;
+
+class RouterParamInvalidException extends InvalidArgumentException
 {
     public function __construct()
     {

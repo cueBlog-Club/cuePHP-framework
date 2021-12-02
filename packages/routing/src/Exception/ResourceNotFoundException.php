@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace CuePhp\Routing\Exception;
 
-class ResourceNotFoundException extends \Exception
+use RuntimeException;
+
+class ResourceNotFoundException extends RuntimeException
 {
     public function __construct(string $path, int $code = 404)
     {

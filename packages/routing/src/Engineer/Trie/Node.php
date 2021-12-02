@@ -9,49 +9,98 @@ namespace CuePhp\Routing\Engineer\Trie;
  */
 class Node
 {
+
     /**
-     * url pattern : like /p/:path
+     * full path and save in the leave node
      * @var string
      */
-    public $pattern = "";
+    private $_pattern = "";
 
     /**
      * url splited parts: llike "p", ":path"
      * @var string
      */
-    public $part = "";
+    private $_part = "";
 
     /**
      * children node
      * @var Node[]
      */
-    public $childs = [];
+    private  $_childs = [];
 
     /**
      * include "*" or ":"  is false 
      * @var bool
      */
-    public $wildcard = true;
+    private $_wildcard = true;
 
-    public function __toString(): string
+    protected function __construct( string $part )
     {
-        return sprintf("node{pattern=%,part=%,wildcard=t}", $this->pattern, $this->part, $this->wildcard);
+        $this->_part = $part;
+        $this->_wildcard = $part[0] === ":" || $part[0] === "*";
+    }
+
+    public static  function newNode(  string $part ): Node
+    {
+        return new self( $part );
+    }
+
+    public function getPart(): string
+    {
+        return $this->_part;
+    }
+
+    public function getWildcard(): bool 
+    {
+        return $this->_wildcard;
+    }
+
+    public function getPattern(): string
+    {
+        return $this->_pattern;
     }
 
     /**
+     * @var string 
+     */
+    public function setPattern(  string $pattern )
+    {
+        $this->_pattern = $pattern;
+    }
+
+    /**
+     * @var Node[]
+     */
+    public function getChilds(): array
+    {
+        return $this->_childs;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf("node{part=%,wildcard=t}", $this->part, $this->wildcard);
+    }
+
+    public function addChild( Node $node )
+    {
+        $this->_childs[] = $node;
+    }
+
+        /**
      * match one child
      * @var string $part
      * @return Node | null
      */
     public  function  matchChild(string $part): ?Node
     {
-        foreach ($this->childs as $child) {
+        foreach ($this->_childs as $child) {
             if ($child->part === $part || $child->wildcard) {
                 return $child;
             }
         }
         return null;
     }
+    
 
     /**
      * match all children
@@ -61,62 +110,11 @@ class Node
     public function matchChildren(string $part): array
     {
         $nodes = [];
-        foreach ($this->childs as $child) {
+        foreach ($this->_childs as $child) {
             if ($child->part === $part || $child->wildcard) {
                 $nodes[] = $child;
             }
         }
         return $nodes;
-    }
-
-    /**
-     *  insert  new Node
-     * @var string pattern
-     * @var array<string> $parts
-     * @var int $height
-     * @return void
-     */
-    public function insert(string $pattern, array $parts, int $height): void
-    {
-        if (count($parts) === $height) {
-            $this->pattern = $pattern;
-            return;
-        }
-        $part = $parts[$height];
-        $child = $this->matchChild($part);
-        if ($child == null) {
-            $child = new Node();
-            $child->part = $part;
-            $child->wildcard = $part[0] === ":" || $part[0] === "*";
-            $this->childs[] = $child;
-        }
-        $child->insert($pattern, $parts, $height + 1);
-    }
-
-    /**
-     * search matched node
-     * @var array<string> $parts
-     * @var int $height
-     * @return Node|null
-     */
-    public function search(array $parts, int $height): ?Node
-    {
-        if(count($parts) === $height) {
-            if( $this->pattern === "" ) {
-                return null;
-            }
-            return $this;
-        }
-        $part = $parts[$height];
-        $children = $this->matchChildren($part);
-
-        foreach ($children as $child) {
-            $result = $child->search( $parts, $height+1 );
-            if( $result !== null ) {
-                return $result;
-            }
-        }
-
-        return null;
     }
 }
