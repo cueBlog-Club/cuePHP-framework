@@ -2,3 +2,4 @@ vendor/
 .DS_store
 .idea
 .phpunit.*
+.coverage

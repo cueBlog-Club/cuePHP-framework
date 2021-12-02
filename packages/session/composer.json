@@ -6,7 +6,9 @@
     "license": "MIT",
     "version": "0.1.0",
     "require": {
-        "php": "^7.1 || ^8.0"
+        "php": "^7.1 | ^8.0",
+        "symfony/filesystem": "^5.4",
+        "illuminate/cache": "^8.74"
     },
     "autoload": {
         "psr-4": { 
@@ -23,6 +25,9 @@
         "phpstan/phpstan": "^1.2",
         "phpunit/phpunit": "^9.5" 
     },
+    "suggest": {
+        "vlucas/phpdotenv":"loads environment var from .env file"
+    },
     "scripts": {
         "fix":  [
             "./vendor/bin/phpcbf --standard=PSR2 src"
@@ -31,7 +36,7 @@
             "./vendor/bin/phpstan analyse src"
         ],
         "unit-test": [
-            "./vendor/bin/phpunit"
+            "php vendor/phpunit/phpunit/phpunit --coverage-clover ./.coverage/clover.xml --verbose"
         ]
     }
 }
