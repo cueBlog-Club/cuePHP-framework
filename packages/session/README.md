@@ -1,9 +1,24 @@
-CuePhp-Seesion
+# CuePhp-Seesion
+> php session manager that supports the use of redis, memcached, filesystem, database memory
 
-+ Session Global Manager( id generator,  Cookie Path, eg)
-+ Session Store Handler
-+ Session Service Provider
+### Install
 
+```shell
+composer require cuephp/session
+```
 
-// Session_Manager::buildSession();
-// (new Session()) -> bind()->start();
+### Usage
+
+####  Get Instance
+```php
+use 
+```
+
+#### Set  Customer Handler
+```php
+
+```
+
+#### Get/Set Value
+```php
+```

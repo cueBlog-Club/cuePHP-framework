@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace CuePhp\Session\Exception;
 
-use RuntimeException;
+use InvalidArgumentException;
 
-class MismatchException extends RuntimeException
+class MismatchException extends InvalidArgumentException
 {
 
 }

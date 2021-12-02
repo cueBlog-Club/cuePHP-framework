@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace CuePhp\Session;
 
 use SessionHandlerInterface;
+use function session_set_save_handler;
+use function session_start;
+use function session_destroy;
+use function session_unset;
 
 class Session
 {
@@ -24,43 +28,68 @@ class Session
 
     public function start()
     {
+        session_set_save_handler($this->handler, true);
         session_start();
     }
 
-    public function bind()
-    {
-        session_set_save_handler($this->handler, true);
-    }
-
+    /**
+     * @var string $key
+     * @var mixed $default
+     * @return mixed
+     */
     public function get(string $key, $default = null)
     {
         return $_SESSION[$key] ?? $default;
     }
 
-    public function set(string $key, $value)
+    /**
+     * @var string $key
+     * @var mixed $value
+     * @return $this
+     */
+    public function set(string $key, $value): Session
     {
-        return $_SESSION[$key] = $value;
+        $_SESSION[$key] = $value;
+        return $this;
     }
 
+    /**
+     * @var string $key
+     * @return bool
+     */
     public function exist(string $key): bool
     {
         return isset($_SESSION[$key]);
     }
 
+    /**
+     * get all values in $_SESSION
+     * @return array
+     */
     public function all(): array
     {
         return $_SESSION;
     }
 
+    /**
+     * delete one Item
+     * @return bool
+     */
     public function remove(string $key)
     {
         unset($_SESSION[$key]);
         return true;
     }
 
-    public function clear()
+    /**
+     * delete all items
+     * @return bool
+     */
+    public function clear(): bool
     {
-        return session_unset();
+        session_unset();
+        session_destroy();
+        return true;
     }
 
     private function _init()

@@ -26,7 +26,8 @@
         "phpunit/phpunit": "^9.5" 
     },
     "suggest": {
-        "vlucas/phpdotenv":"loads environment var from .env file"
+        "vlucas/phpdotenv":"loads environment var from .env file",
+        "ext-redis": "phpredis client"
     },
     "scripts": {
         "fix":  [
