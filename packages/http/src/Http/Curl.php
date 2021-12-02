@@ -1,9 +1,9 @@
 <?php
-declare(strict_types=1)
+declare(strict_types=1);
 
-namespace SolaTyolo\Lighthttp\Http;
+namespace CuePhp\Http\Http;
 
-use SolaTyolo\Lighthttp\Http\Method;
+use CuePhp\Http\IMethod;
 
 class Curl
 {
@@ -113,21 +113,21 @@ class Curl
 
     public function get(string $path, array $params = [])
     {
-        return $this->request(Method::GET, $path, $params);
+        return $this->request(IMethod::GET, $path, $params);
     }
 
     public function post(string $path, $body = [])
     {
-        return $this->request(Method::POST, $path, $body);
+        return $this->request(IMethod::POST, $path, $body);
     }
 
     public function put(string $path, $body = [])
     {
-        return $this->request(Method::PUT, $path, $body);
+        return $this->request(IMethod::PUT, $path, $body);
     }
 
     public function delete(string $path, array $params = [])
     {
-        return $this->request(Method::DELETE, $path, $params);
+        return $this->request(IMethod::DELETE, $path, $params);
     }
 }
