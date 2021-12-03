@@ -4,7 +4,7 @@
     "description": "cuephp Cookie Component",
     "keywords": ["cookie", "php"],
     "license": "MIT",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "require": {
         "php": "^7.2 || ^8.0"
     },
