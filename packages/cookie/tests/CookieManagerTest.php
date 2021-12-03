@@ -37,7 +37,6 @@ final class CookieManagerTest extends TestCase
     {
         $cookieString = "test=value;expires=100;path=/;domain=www.test.com;secure;httponly";
         $cookie = CookieManager::createFromHeaders($cookieString);
-        echo $cookie->getValue(), "\n";
         $this->assertSame( 'test', $cookie->getName() );
         $this->assertSame( 'value', $cookie->getValue() );
         $this->assertSame( 100, $cookie->getExpire() );

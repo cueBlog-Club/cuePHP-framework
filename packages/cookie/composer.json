@@ -31,7 +31,7 @@
             "./vendor/bin/phpstan analyse src"
         ],
         "unit-test": [
-            "./vendor/bin/phpunit"
+            "vendor/bin/phpunit --coverage-clover=coverage.xml"
         ]
     }
 }
