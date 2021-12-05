@@ -33,12 +33,12 @@ abstract class EngineBase implements CacheInterface
      * @param string $key     The unique key of this item in the cache.
      * @param mixed  $default Default value to return if the key does not exist.
      *
-     * @return CacheItemInterface The value of the item from the cache, or $default in case of cache miss.
+     * @return mixed The value of the item from the cache, or $default in case of cache miss.
      *
      * @throws InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
-    abstract public function get($key, $default = null): CacheItemInterface;
+    abstract public function get($key, $default = null);
 
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional expiration TTL time.
@@ -169,7 +169,7 @@ abstract class EngineBase implements CacheInterface
      */
     protected function ensureArgument(string $str): bool
     {
-        if (!is_string($str) || strlen($str)) {
+        if (!is_string($str) || strlen($str) <= 0 ) {
             throw new InvalidArgumentException(' Cache Value must be non-empty string ');
         }
         return true;

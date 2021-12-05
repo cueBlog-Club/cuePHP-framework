@@ -14,8 +14,8 @@ class YacEngineConfigTest extends TestCase
         $config->setTTL(10);
         $config->setPrefix('cache_');
 
-        $this->assertSame('cache_', $config->getTTL());
-        $this->assertSame(10, $config->getPrefix());
+        $this->assertSame('cache_', $config->getPrefix());
+        $this->assertSame(10, $config->getTTL());
     }
     
 }

@@ -28,6 +28,9 @@ final class Cache implements CacheItemInterface
      */
     private $_val;
 
+    /**
+     * @var bool
+     */
     private $_isHit = false;
 
     const DEFAULT_TTL = 5 * 60;
@@ -50,7 +53,7 @@ final class Cache implements CacheItemInterface
     }
 
     /**
-     * @return ttl
+     * @return int
      */
     public function getTTL(): int
     {
@@ -88,7 +91,7 @@ final class Cache implements CacheItemInterface
             return $this;
         }
         if ($expiration instanceof DateTimeInterface) {
-            $this->_ttl = strtotime($expiration->format('U.u'));
+            $this->_ttl = (int)$expiration->format('U') - time();
             return $this;
         }
         throw new InvalidArgumentException('invalid type for expiration');
@@ -112,8 +115,10 @@ final class Cache implements CacheItemInterface
         }
 
         if ($time instanceof DateInterval) {
+            // UTC-timezone
             $date = DateTimeImmutable::createFromFormat('U', (string)time());
-            $this->_ttl = $date->add($time)->format('U');
+            $ts =  $date->add($time)->format('U');
+            $this->_ttl = (int)$ts - time();
             return $this;
         }
 

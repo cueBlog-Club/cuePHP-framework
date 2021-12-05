@@ -11,6 +11,10 @@ class Str
       */
     public static function endsWith(string $str, string $posfix): bool
     {
-        return substr($str, strpos($str, $posfix)) === $posfix;
+        $strpos = strpos($str, $posfix);
+        if( $strpos === false ) {
+            return false;
+        }
+        return substr($str, $strpos) === $posfix;
     }
 }

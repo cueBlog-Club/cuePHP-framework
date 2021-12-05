@@ -8,12 +8,16 @@ use CuePhp\Cache\Counter;
 
 class FileEngineTest extends TestCase 
 {
-    public function testCreate()
-    {
-        $counter = Counter::create( 'key', 1 );
 
-        $this->assertSame('key', $counter->getName());
-        $this->assertSame(1, $counter->getData());
+    protected function setUp(): void
+    {
+        
     }
+
+    protected function tearDown(): void
+    {
+        
+    }
+
     
 }

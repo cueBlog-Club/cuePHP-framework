@@ -14,9 +14,9 @@ class FileEngineConfigTest extends TestCase
         $config->setTTL(10);
         $config->setPrefix('cache_');
 
-        $this->assertSame('cache_', $config->getTTL());
-        $this->assertSame(10, $config->getPrefix());
-        $this->assertSame("/tmp/", $config->getPath());
+        $this->assertSame('cache_', $config->getPrefix());
+        $this->assertSame(10, $config->getTTL());
+        $this->assertSame("/tmp", $config->getPath());
         $this->assertSame(0664, $config->getMask());
     }
 

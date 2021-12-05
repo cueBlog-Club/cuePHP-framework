@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace CuePhp\Cache;
 
-use Carbon\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use CuePhp\Cache\Cache;
+use CuePhp\Cache\Exception\InvalidArgumentException;
 use DateInterval;
 use DateTime;
 
@@ -16,12 +16,16 @@ class CacheTest extends TestCase
     {
         $cache  = new Cache('key', 'value');
         $this->assertSame( 'key', $cache->getKey() );
-        $this->assertSame( 'value', $cache->get() );
         $this->assertSame( Cache::DEFAULT_TTL, $cache->getTTL() );
         $this->assertSame(false, $cache->isHit());
-
+        // 
         $cache->setIsHit(true);
+        $this->assertSame( 'value', $cache->get() );
         $this->assertSame(true, $cache->isHit());
+        //
+        $cache->setIsHit(false);
+        $this->assertNull(  $cache->get() );
+
     }
 
     public function testExpiresAt()
@@ -53,7 +57,7 @@ class CacheTest extends TestCase
         // asset DateInterval
         $date = (new DateTime( "+1 day" ))->diff( new DateTime() );
         $cache->expiresAfter($date);
-        $this->assertSame(86400, $cache->getTTL());
+        $this->assertSame(-86400, $cache->getTTL());
 
         //assert int
         $cache->expiresAfter(20);

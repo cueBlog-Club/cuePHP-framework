@@ -16,8 +16,8 @@ class RedisEngineConfigTest extends TestCase
         $config->setPrefix('cache_');
         $config->setHost("redis://");
 
-        $this->assertSame('cache_', $config->getTTL());
-        $this->assertSame(10, $config->getPrefix());
+        $this->assertSame('cache_', $config->getPrefix());
+        $this->assertSame(10, $config->getTTL());
         $this->assertSame("redis://", $config->getHost());
     }
 }

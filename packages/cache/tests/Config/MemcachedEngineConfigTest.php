@@ -16,11 +16,11 @@ class MemcachedEngineConfigTest extends TestCase
         $config->setPrefix('cache_');
         $config->setHost('memcached://');
 
-        $this->assertSame('cache_', $config->getTTL());
-        $this->assertSame(10, $config->getPrefix());
-        $this->assertSame("memcached", $config->getHost());
+        $this->assertSame('cache_', $config->getPrefix());
+        $this->assertSame(10, $config->getTTL());
+        $this->assertSame("memcached://", $config->getHost());
         $this->assertSame(100, $config->getWeight());
-        $this->assertSame(1211, $config->getPort());
+        $this->assertSame(11211, $config->getPort());
     }
 
     public function testAccessWithDynamic()
