@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace CuePhp\Session;
 
 use SessionHandlerInterface;
+use CuePhp\Session\SessionInterface;
 use function session_set_save_handler;
 use function session_start;
 use function session_destroy;
 use function session_unset;
 
-class Session
+class Session implements SessionInterface
 {
     /**
      * @var SessionHandlerInterface

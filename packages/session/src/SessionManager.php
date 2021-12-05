@@ -4,28 +4,42 @@ declare(strict_types=1);
 
 namespace CuePhp\Session;
 
+use CuePhp\Session\Config\SessionConfig;
 use CuePhp\Session\Exception\MismatchException;
+use CuePhp\Session\Exception\StartFatalException;
 use CuePhp\Session\Handler\CacheSessionHandler;
 use CuePhp\Session\Handler\FileSessionHandler;
 use SessionHandlerInterface;
-use CuePhp\Session\Session;
+use CuePhp\Session\SessionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+
+use const PHP_SESSION_ACTIVE;
 
 final class SessionManager
 {
 
-    const DEFAULT_HANDLER_NAME = FileSessionHandler::HANDLER_TYPE;
+    /**
+     * @var SessionConfig
+     */
+    private $_config;
 
-    public function __construct()
+    public function __construct(  SessionConfig $config  )
     {
+        $this->config = $config;
     }
 
     /**
      * @return Session
      * @throws MismatchException
      */
-    public function buildSession(): Session
+    public function buildSession(): SessionInterface
     {
+        if( (int)session_status() === PHP_SESSION_ACTIVE ) {
+            throw new StartFatalException( 'session already started' );
+        }
+
+
+
         $handler = $this->getHanlder();
         if ($handler === FileSessionHandler::HANDLER_TYPE) {
             return $this->createFileHandler();

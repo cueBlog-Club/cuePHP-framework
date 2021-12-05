@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace CuePhp\Cache\Engine;
 
 use CuePhp\Cache\Config\InMemoryConfig;
+use CuePhp\Cache\Counter;
 use CuePhp\Cache\Engine\EngineBase;
 use CuePhp\Cache\Exception\InvalidArgumentException;
 use CuePhp\Cache\Exception\RuntimeException;
+use CuePhp\Cache\Traits\CounterTrait;
 
-class InMemoryEngine extends EngineBase
+class InMemoryEngine extends EngineBase implements CounterInterface
 {
+    use CounterTrait;
     /**
      * @var array<string, array>
      * {
@@ -111,13 +114,39 @@ class InMemoryEngine extends EngineBase
         return true;
     }
 
-    public function incr(string $key, int $offset = 1)
+    /**
+    * @var string $key
+    * @var int $offset
+    * @return Counter
+    */
+    public function incr(string $key, int $offset = 1): Counter
     {
-        throw new RuntimeException(' can not be incr ');
+        $this->ensureArgument($key);
+        if (isset($this->_data[$key][self::DATA_VALUE_KEY_NAME]) && !is_numeric($this->_data[$key][self::DATA_VALUE_KEY_NAME])) {
+            throw new RuntimeException('value must be number');
+        } elseif (!isset($this->_data[$key][self::DATA_VALUE_KEY_NAME])) {
+            $this->_data[$key][self::DATA_VALUE_KEY_NAME]  = 0;
+        }
+
+        $this->_data[$key][self::DATA_VALUE_KEY_NAME] += $offset;
+        return $this->transferToCounter($key, $this->_data[$key][self::DATA_VALUE_KEY_NAME]);
     }
 
-    public function decr(string $key, int $offset = 1)
+    /**
+     * @var string $key
+     * @var int $offset
+     * @return Counter
+     */
+    public function decr(string $key, int $offset = 1): Counter
     {
-        throw new RuntimeException(' can not be decr ');
+        $this->ensureArgument($key);
+        if (isset($this->_data[$key][self::DATA_VALUE_KEY_NAME]) && !is_numeric($this->_data[$key][self::DATA_VALUE_KEY_NAME])) {
+            throw new RuntimeException('value must be number');
+        } elseif (!isset($this->_data[$key][self::DATA_VALUE_KEY_NAME])) {
+            $this->_data[$key][self::DATA_VALUE_KEY_NAME]  = 0;
+        }
+
+        $this->_data[$key][self::DATA_VALUE_KEY_NAME] -= $offset;
+        return $this->transferToCounter($key, $this->_data[$key][self::DATA_VALUE_KEY_NAME]);
     }
 }

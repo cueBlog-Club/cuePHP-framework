@@ -6,7 +6,7 @@ namespace CuePhp\Cache;
 use PHPUnit\Framework\TestCase;
 use CuePhp\Cache\Counter;
 
-class YacEngineTest extends TestCase 
+class CounterTest extends TestCase 
 {
     public function testCreate()
     {

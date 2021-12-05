@@ -6,8 +6,10 @@ namespace CuePhp\Cache\Engine;
 
 use CuePhp\Cache\Exception\InvalidArgumentException;
 use CuePhp\Cache\Config\EngineConfig;
+use Psr\Cache\CacheItemInterface;
+use Psr\SimpleCache\CacheInterface;
 
-abstract class EngineBase implements EngineInterface
+abstract class EngineBase implements CacheInterface
 {
 
     /**
@@ -21,7 +23,6 @@ abstract class EngineBase implements EngineInterface
     }
 
     /**
-     * @param EngineConfig $config
      * @return bool
      */
     abstract protected function init(): bool;
@@ -32,12 +33,12 @@ abstract class EngineBase implements EngineInterface
      * @param string $key     The unique key of this item in the cache.
      * @param mixed  $default Default value to return if the key does not exist.
      *
-     * @return mixed The value of the item from the cache, or $default in case of cache miss.
+     * @return CacheItemInterface The value of the item from the cache, or $default in case of cache miss.
      *
      * @throws InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
-    abstract public function get($key, $default = null);
+    abstract public function get($key, $default = null): CacheItemInterface;
 
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional expiration TTL time.
@@ -76,26 +77,12 @@ abstract class EngineBase implements EngineInterface
 
 
     /**
-     * @param string $key
-     * @param int $offset
-     * @return int
-     */
-    abstract public function incr(string $key, int $offset = 1);
-
-    /**
-     * @param string $key
-     * @param int $offset
-     * @return int
-     */
-    abstract public function decr(string $key, int $offset = 1);
-
-    /**
      * Obtains multiple cache items by their unique keys.
      *
      * @param iterable $keys    A list of keys that can obtained in a single operation.
      * @param mixed    $default Default value to return for keys that do not exist.
      *
-     * @return iterable A list of key => value pairs. Cache keys that do not exist or are stale will have $default as value.
+     * @returniterable A list of key => value pairs. Cache keys that do not exist or are stale will have $default as value.
      *
      * @throws InvalidArgumentException
      *   MUST be thrown if $keys is neither an array nor a Traversable,
@@ -108,7 +95,7 @@ abstract class EngineBase implements EngineInterface
             if (!is_string($value) || strlen($value)) {
                 throw new InvalidArgumentException(' Cache Value must be non-empty string ');
             }
-            $results[$key] = $this->get($key, $default); 
+            $results[$key] = $this->get($key, $default);
         }
         return $results;
     }
@@ -166,6 +153,15 @@ abstract class EngineBase implements EngineInterface
     public function has($key): bool
     {
         return $this->get($key) !== null;
+    }
+
+    /**
+     * @var string $key
+     * @return string
+     */
+    protected function getCacheKey(string $key): string
+    {
+        return $this->config->getPrefix() . $key;
     }
 
     /**

@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace CuePhp\Session\Handler;
 
-use Illuminate\Contracts\Cache\Repository as CacheContract;
-use SessionHandlerInterface;
+use CuePhp\Cache\Engine\RedisEngine;
+use CuePhp\Session\Handler\SaveHandlerInterface;
 
-class CacheSessionHandler implements SessionHandlerInterface
+class CacheSessionHandler implements SaveHandlerInterface
 {
 
-    const HANDLER_TYPE = 'cache';
     /**
-     * @var CacheContract
+     * @var RedisEngine
      */
     protected $cache;
 
@@ -23,11 +22,11 @@ class CacheSessionHandler implements SessionHandlerInterface
 
     /**
      *
-     * @param  \Illuminate\Contracts\Cache\Repository  $cache
+     * @param RedisEngine  $cache
      * @param  int  $minutes
      * @return void
      */
-    public function __construct(?CacheContract $cache, $minutes)
+    public function __construct(RedisEngine $cache, $minutes)
     {
         $this->cache = $cache;
         $this->minutes = $minutes;
@@ -50,16 +49,21 @@ class CacheSessionHandler implements SessionHandlerInterface
 
     public function write($sessionId, $data)
     {
-        return $this->cache->put($sessionId, $data, $this->minutes * 60);
+        return $this->cache->set($sessionId, $data, $this->minutes * 60);
     }
 
     public function destroy($sessionId)
     {
-        return $this->cache->forget($sessionId);
+        return $this->cache->delete($sessionId);
     }
 
     public function gc($lifetime)
     {
         return true;
+    }
+
+    public function getAlias(): string
+    {
+        return 'redis';
     }
 }

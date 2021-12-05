@@ -4,29 +4,27 @@ declare(strict_types=1);
 
 namespace CuePhp\Session\Handler;
 
-use SessionHandlerInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
+use CuePhp\Cache\Engine\FileEngine;
+use CuePhp\Session\Handler\SaveHandlerInterface;
 
-class FileSessionHandler implements SessionHandlerInterface
+class FileSessionHandler implements SaveHandlerInterface
 {
 
-    const HANDLER_TYPE = 'file';
-
-    protected $files;
-    protected $path;
+    /**
+     * @var FileEngine
+     */
+    private $_file = null;
 
     /**
-     *
+     * session ttl
      * @var int
      */
-    protected $minutes;
+    private $_minutes;
 
-    public function __construct(Filesystem $files, $path, $minutes)
+    public function __construct(FileEngine $file, int $minutes)
     {
-        $this->path = $path;
-        $this->files = $files;
-        $this->minutes = $minutes;
+        $this->_file = $file;
+        $this->_minutes = $minutes;
     }
 
 
@@ -42,35 +40,35 @@ class FileSessionHandler implements SessionHandlerInterface
 
     public function read($sessionId)
     {
-        if (is_file($path = $this->path . '/' . $sessionId)) {
-            //TODO
-            return file_get_contents($path);
-        }
-        return '';
+        return $this->_file->get($sessionId);
     }
 
     public function write($sessionId, $data)
     {
-        return $this->files->dumpFile($this->path . '/' . $sessionId, $data);
+        return $this->_file->set( $sessionId, $data, $this->_minutes * 60 );
     }
 
     public function destroy($sessionId)
     {
-        unlink($this->path . '/' . $sessionId);
-        return true;
+        return $this->_file->delete( $sessionId );
     }
 
     public function gc($lifetime)
     {
-        $files = Finder::create()
-            ->in($this->path)
-            ->files()
-            ->ignoreDotFiles(true)
-            ->date('<= now - ' . $lifetime . ' seconds');
+        // $files = Finder::create()
+        //     ->in($this->path)
+        //     ->files()
+        //     ->ignoreDotFiles(true)
+        //     ->date('<= now - ' . $lifetime . ' seconds');
 
-        foreach ($files as $file) {
-            unlink($file->getRealPath());
-        }
+        // foreach ($files as $file) {
+        //     unlink($file->getRealPath());
+        // }
         return true;
+    }
+
+    public function getAlias(): string
+    {
+        return 'file';
     }
 }
