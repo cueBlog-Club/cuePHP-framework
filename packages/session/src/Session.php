@@ -4,32 +4,31 @@ declare(strict_types=1);
 
 namespace CuePhp\Session;
 
-use SessionHandlerInterface;
 use CuePhp\Session\SessionInterface;
-use function session_set_save_handler;
 use function session_start;
 use function session_destroy;
 use function session_unset;
 
-class Session implements SessionInterface
+class Session
 {
-    /**
-     * @var SessionHandlerInterface
-     */
-    protected $handler = null;
 
     /**
-     * TODO single
+     * @var string
      */
-    public function __construct(SessionHandlerInterface $handler, $id = null)
+    private $_id;
+
+
+    /**
+     * 
+     */
+    public function __construct( string $id = '' )
     {
-        $this->handler = $handler;
+        $this->_id = $id;
         $this->_init();
     }
 
     public function start()
     {
-        session_set_save_handler($this->handler, true);
         session_start();
     }
 

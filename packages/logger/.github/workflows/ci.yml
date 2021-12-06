@@ -31,7 +31,6 @@ jobs:
         with:
           php-version: "${{ matrix.php-version }}"
           coverage: "xdebug"
-          extensions: "yac, redis"
           ini-values: "zend.assertions=1"
 
       - name: "Install dependencies with Composer"

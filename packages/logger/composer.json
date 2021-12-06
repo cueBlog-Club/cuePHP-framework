@@ -4,20 +4,22 @@
     "description": "a light weight log lib",
     "keywords": [ "psr-3", "log"],
     "license": "MIT",
-    "homepage": "https://github.com/SolaTyolo/lightlog",
+    "version": "0.1.0",
+    "homepage": "https://github.com/cueBlog-Club/cuePHP-framework/tree/main/packages/logger",
     "autoload": {
         "psr-4": {
-            "SolaTyolo\\Lightlog\\": "src/"
+            "SolaTyolo\\Logger\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SolaTyolo\\Tests\\": "tests/"
+            "SolaTyolo\\Tests\\Logger\\": "tests/"
         }
     },
     "require": {
-        "php": "~7.3 || ^8.0",
-        "psr/log": "^3.0"
+        "php": "^7.3 || ^8.0",
+        "monolog/monolog": "^2.0",
+        "psr/log": "^1.0 ||^2.0||^3.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "*",
@@ -32,7 +34,7 @@
             "./vendor/bin/phpstan analyse src"
         ],
         "unit-test": [
-            "./vendor/bin/phpunit"
+            "vendor/bin/phpunit --coverage-clover=coverage.xml"
         ]
     }
 }

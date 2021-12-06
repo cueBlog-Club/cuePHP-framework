@@ -7,13 +7,11 @@ namespace CuePhp\Session;
 use CuePhp\Session\Config\SessionConfig;
 use CuePhp\Session\Exception\MismatchException;
 use CuePhp\Session\Exception\StartFatalException;
-use CuePhp\Session\Handler\CacheSessionHandler;
-use CuePhp\Session\Handler\FileSessionHandler;
-use SessionHandlerInterface;
+use CuePhp\Session\Handler\SaveHandlerInterface;
 use CuePhp\Session\SessionInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 use const PHP_SESSION_ACTIVE;
+use function session_set_save_handler;
 
 final class SessionManager
 {
@@ -37,58 +35,11 @@ final class SessionManager
         if( (int)session_status() === PHP_SESSION_ACTIVE ) {
             throw new StartFatalException( 'session already started' );
         }
-
-
-
-        $handler = $this->getHanlder();
-        if ($handler === FileSessionHandler::HANDLER_TYPE) {
-            return $this->createFileHandler();
-        } elseif ($handler === CacheSessionHandler::HANDLER_TYPE) {
-            return $this->createCacheHandler();
-        } else {
-            throw new MismatchException(
-                `handler ${handler} is not implement`
-            );
+        $handler = $this->_config->getHandler();
+        if( $handler instanceof SaveHandlerInterface  ) {
+            throw new StartFatalException(`handler is missing`);
+        }
+        session_set_save_handler($handler, true);
+        return new Session();
     }
-}
-
-    /**
-     * TODO
-     */
-protected function createFileHandler(): Session
-{
-    return $this->createSession(
-        new FileSessionHandler(new Filesystem(), getenv('SESSION_FILE'), (int)getenv('SESSION_TTL'))
-    );
-}
-
-    /**
-     * TODO
-     */
-protected function createCacheHandler(): Session
-{
-    return $this->createSession(
-        new CacheSessionHandler(null, (int)getenv('SESSION_TTL'))
-    );
-}
-
-    /**
-     * create a new session instance
-     * @var SessionHandlerInterface $handler
-     * @return Session
-     */
-protected function createSession(SessionHandlerInterface $handler): Session
-{
-    return new Session($handler);
-}
-
-    /**
-     * @return string
-     */
-private function getHanlder(): string
-{
-    return getenv("SESSION_HANDLER") ?? self::DEFAULT_HANDLER_NAME;
-}
-
-
 }

@@ -1,63 +1,29 @@
 <?php
 
-namespace SolaTyolo\Lightlog;
+namespace CuePhp\Logger;
 
 use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 
 class Logger implements LoggerInterface
 {
 
-    const LEVEL_NONE = 'none';
-
     /**
-     * log path
-     * @var string
+     * @var LoggerInterface
      */
-    private $logFile = "/tmp/";
+    protected $logger;
 
-    /**
-     * level map
-     * @ var array
-     */
-    const LEVELS = [
-        self::LEVEL_NONE => 65535,
-        LogLevel::DEBUG => 0,
-        LogLevel::INFO => 1,
-        LogLevel::NOTICE => 2,
-        LogLevel::WARNING => 3,
-        LogLevel::ERROR => 4,
-        LogLevel::CRITICAL => 5,
-        LogLevel::ALERT => 6,
-        LogLevel::EMERGENCY => 7,
-    ];
-
-    /**
-     * logger output level
-     * @var string
-     */
-    private $_level = self::LEVELS[self::LEVEL_NONE];
-
-    /**
-     * output channels
-     * @var array
-     */
-    private $channels = [];
-
-    protected function __construct( $logLevel )
+    protected function __construct(LoggerInterface $logger)
     {
-        // $this->_initLevel($logLevel);
-        // $this->_initPath();
+        $this->logger = $logger;
     }
 
-
-    public function log($level, string|\Stringable $message, array $context = []): void
+    public function log($level, $message, array $context = array())
     {
-        foreach( $this->channels as $channel ) {
-             
+        foreach ($this->channels as $channel) {
         }
-
-
     }
 
     /**
@@ -68,12 +34,12 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function emergency(string|\Stringable $message, array $context = []): void
+    public function emergency($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::EMERGENCY)) {
-            $this->log(LogLevel::EMERGENCY, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
+
+
     /**
      * Action must be taken immediately.
      *
@@ -85,11 +51,10 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function alert(string|\Stringable $message, array $context = []): void
+    public function alert($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::ALERT)) {
-            $this->log(LogLevel::ALERT, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
+
     }
 
     /**
@@ -102,11 +67,10 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function critical(string|\Stringable $message, array $context = []): void
+    public function critical($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::CRITICAL)) {
-            $this->log(LogLevel::CRITICAL, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
+
     }
 
     /**
@@ -118,11 +82,10 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function error(string|\Stringable $message, array $context = []): void
+    public function error($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::ERROR)) {
-            $this->log(LogLevel::ERROR, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
+
     }
 
     /**
@@ -136,11 +99,10 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function warning(string|\Stringable $message, array $context = []): void
+    public function warning($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::WARNING)) {
-            $this->log(LogLevel::WARNING, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
+
     }
 
     /**
@@ -151,11 +113,10 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function notice(string|\Stringable $message, array $context = []): void
+    public function notice($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::NOTICE)) {
-            $this->log(LogLevel::NOTICE, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
+
     }
 
     /**
@@ -168,11 +129,10 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function info(string|\Stringable $message, array $context = []): void
+    public function info($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::INFO)) {
-            $this->log(LogLevel::INFO, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
+
     }
 
     /**
@@ -183,18 +143,39 @@ class Logger implements LoggerInterface
      *
      * @return void
      */
-    public function debug(string|\Stringable $message, array $context = []): void
+    public function debug($message, array $context = array())
     {
-        if ($this->_isOutputLogger(LogLevel::DEBUG)) {
-            $this->log(LogLevel::DEBUG, $message, $context);
-        }
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
-    /**
-     * confirm whether is  log to output
-     */
-    private function _isOutputLogger($level): bool
+    protected function writeLog($level, $message,  $context)
     {
-        return $this->_level < self::LEVELS[$level];
+        $this->logger->{$level}(
+            $message = $this->formatMessage($message),
+            $context = $context
+        );
+    }
+
+    protected function formatMessage($message)
+    {
+        if (is_array($message)) {
+            return var_export($message, true);
+        } elseif ($message instanceof Jsonable) {
+            return $message->toJson();
+        } elseif ($message instanceof Arrayable) {
+            return var_export($message->toArray(), true);
+        }
+
+        return $message;
+    }
+
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    public function __call($name, $arguments)
+    {
+        return $this->logger->{$name}(...$arguments);
     }
 }
