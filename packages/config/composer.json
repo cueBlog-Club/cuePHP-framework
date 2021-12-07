@@ -1,0 +1,39 @@
+{
+    "name": "cuephp/config",
+    "type": "library",
+    "description": "cuephp Config Component",
+    "keywords": ["config", "php"],
+    "license": "MIT",
+    "version": "0.1.0",
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": { 
+            "CuePhp\\Config\\": "src/" 
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { 
+            "CuePhp\\Test\\Config\\": "tests/" 
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "phpstan/phpstan": "^1.2",
+        "phpunit/phpunit": "^9.5" ,
+        "mockery/mockery": "^1.3"
+    },
+    "scripts": {
+        "fix":  [
+            "./vendor/bin/phpcbf --standard=PSR2 src"
+        ],
+        "analyse": [
+            "./vendor/bin/phpstan analyse src"
+        ],
+        "unit-test": [
+            "vendor/bin/phpunit --coverage-clover=coverage.xml"
+        ]
+    }
+}
