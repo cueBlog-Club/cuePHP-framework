@@ -7,6 +7,7 @@ namespace CuePhp\Test\Config\Loader\File;
 use CuePhp\Config\Exception\LoaderException;
 use PHPUnit\Framework\TestCase;
 use CuePhp\Config\Loader\File\PhpLoader;
+use TypeError;
 
 class PhpLoaderTest extends TestCase
 {
@@ -27,7 +28,7 @@ class PhpLoaderTest extends TestCase
 
     public function testLoadInvalidPhpFile()
     {
-        $this->expectException(LoaderException::class);
+        $this->expectException(TypeError::class);
         $this->php->loadFromFile( __DIR__. '/../../mocks/fail/error.php' );
     }
 

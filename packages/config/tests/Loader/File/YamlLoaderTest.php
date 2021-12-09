@@ -7,6 +7,7 @@ namespace CuePhp\Test\Config\Loader\File;
 use CuePhp\Config\Exception\LoaderException;
 use PHPUnit\Framework\TestCase;
 use CuePhp\Config\Loader\File\YamlLoader;
+use TypeError;
 
 class YamlLoaderTest extends TestCase
 {
@@ -26,7 +27,7 @@ class YamlLoaderTest extends TestCase
 
     public function testLoadInvalidYml()
     {
-        $this->expectException(LoaderException::class);
+        $this->expectException(TypeError::class);
         $this->yml->loadFromFile( __DIR__. '/../../mocks/fail/error.yml' );
     }
 

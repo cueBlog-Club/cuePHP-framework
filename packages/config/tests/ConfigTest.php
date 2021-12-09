@@ -10,6 +10,7 @@ use CuePhp\Config\Exception\LoaderException;
 use CuePhp\Config\Loader\File\JsonLoader;
 use CuePhp\Config\Loader\File\PhpLoader;
 use CuePhp\Config\Loader\File\YamlLoader;
+use TypeError;
 
 class ConfigTest extends TestCase
 {
@@ -49,7 +50,7 @@ class ConfigTest extends TestCase
         $config = new Config(__DIR__ . '/mocks/pass/config.yml', new YamlLoader());
         $this->assertSame(1, $config->get('demo.section'));
         // TODO
-        $this->expectException(LoaderException::class);
+        $this->expectException(TypeError::class);
         $config = new Config(__DIR__ . '/mocks/pass/empty.yml', new YamlLoader());
         $this->assertSame([], $config->all());
     }
@@ -71,7 +72,7 @@ class ConfigTest extends TestCase
         $config = new Config(__DIR__ . '/mocks/pass/config.php', new PhpLoader());
         $this->assertSame(1, $config->get('demo.section'));
         // TODO
-        $this->expectException(LoaderException::class);
+        $this->expectException(TypeError::class);
         $config = new Config(__DIR__ . '/mocks/pass/empty.php', new PhpLoader());
         $this->assertSame([], $config->all());
     }
