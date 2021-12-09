@@ -15,3 +15,6 @@ compose require cuephp/config
 
 ### Usage
 
++ static config: env, php, ini
++ dynamic config: db, cache, config-server
++ not support for write

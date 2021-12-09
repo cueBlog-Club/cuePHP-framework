@@ -8,16 +8,8 @@ use CuePhp\Config\Exception\LoaderException;
 interface LoaderInterface
 {
     /**
-     * @param string $key
-     * @return bool
+     * @param array|null $data
+     * @throws LoaderException
      */
-    public function has(string $key): bool;
-
-    /**
-     * @param string $key
-     * @return array|string
-     * @throws  LoaderException
-     */
-    public function load(string $key );
-
+    public function load(?array $data): array;
 }

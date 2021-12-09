@@ -1,29 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace CuePhp\Config\Loader;
 
 use CuePhp\Config\Exception\LoaderException;
+use Dotenv\Dotenv;
 
-class DotenvLoader implements LoaderInterface
+final class DotenvLoader extends EnvLoader
 {
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has(string $key): bool
+
+    public function load(?array $data): array
     {
-        return true;
+        // load .env to environment
+        $env = Dotenv::createImmutable(__DIR__);
+        $env->load();
+        return parent::load(null);
     }
-
-    /**
-     * @param string $key
-     * @return array|string
-     * @throws  LoaderException
-     */
-    public function load(string $key )
-    {
-
-    }
-
 }

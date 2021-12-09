@@ -9,20 +9,8 @@ use CuePhp\Config\Loader\LoaderInterface;
 
 class EnvLoader implements LoaderInterface
 {
-    public function has(string $key): bool
+    public function load(?array $data): array
     {
-        $data = getenv($key);
-        if ($data === false) {
-            return false;
-        }
-        return true;
-    }
-
-    public function load(string $key)
-    {
-        if ($this->has($$key) === false) {
-            throw new LoaderException(`config is not exist`);
-        }
-        return getenv($key);
+        return getenv();
     }
 }
